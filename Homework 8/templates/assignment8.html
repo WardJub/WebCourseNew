@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/static/css/assignment8.css">
+    <title>Assignment 8</title>
+</head>
+<body>
+    {% set name='' %} <!-- declaring an empty variable called name, so we can use the default filter later and show how it works-->
+
+    <!-- I will create a "menu" HTML file and include it in this page using the include function-->
+    {% set page_name='Assignment 8 Page' %} <!--this page name will be used in the menu to view welcome message-->
+    {%include ('menu.html') %} <!-- including the html page "menu" we created, so we don't copy the code-->
+
+
+    <!--Now I will use 2 filters on a variable-->
+    <h2>• Using 2 Filters:</h2>
+    <p>How Are You Mr. {{name | default ('User',true) | upper() }}!</p>
+    <!-- I used the "default" filter, and the "upper()" filter.
+     name variable is still empty so we will see "User", and it will be in uppercase because we used the filter "upper"-->
+
+
+    <!--Now I will use if - else -->
+    <h2>• Using If-Else:</h2>
+    {% if name=='' %}
+    <p>The name variable is still empty - has no value</p>
+    {%else%}
+    <p>The value of name variable is: {{name}}</p>
+    {% endif %}
+    <!--now I will declare a value for name variable, and check the if else again-->
+    {% set name='Wonderful' %}
+    {% if name=='' %}
+    <p>The name variable is still empty - has no value</p>
+    {%else%}
+    <p> Your new name is Mr.{{name}}</p>
+    {% endif %}
+
+
+    <!--Now I will use loops to introduce my top 5 tv shows-->
+    <h2>• Using A Loop - My Top 5 TV Shows</h2>
+    <ol>
+        {% for value in tvshows %}
+        <li> {{value}} </li>
+        {% endfor %}
+    </ol>
+
+
+    <!--Now I will demonstrate a Block and use the Super function-->
+    <!-- I will create a template called blocks.html and use it here after-->
+    <h2>• Using Extend, Blocks & Super() Method:</h2>
+    {% extends 'blocks.html'%}
+    {%block body%}
+        {{super()}}
+        <p>This message is from the normal block</p>
+    {% endblock %}
+
+
+</body>
+</html>

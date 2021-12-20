@@ -1,0 +1,9 @@
+*{  
+    font-size: 25px  ; text-align: center;
+}
+
+body {background-color:coral; border: 2px solid black;}
+h2{color:darkslategrey; text-align: center; font-family: monospace;}
+#FirstName { color:red}
+.EmailAndPassword { color: blue;}
+label[name="Notes"] { background-color: dimgrey;}

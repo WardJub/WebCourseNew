@@ -1,0 +1,86 @@
+body{
+    background-color: tomato;
+}
+*{
+    font-family: sans-serif;
+}
+#GridContainer{
+    display: grid; 
+    grid-template-areas: 
+    'name photo'
+    'education education'
+    'skills skills';
+}
+#Name{ 
+    grid-area: name;
+    height: 50px;
+    width: 150px;
+    padding: 20px;
+    margin: 20px;
+    background-color: white;
+}
+
+@keyframes RotatingProfilePhoto {
+    0% {                                   /* instead of from and to we can write 0 and 100 percent*/
+        transform: rotate(0deg)
+    }
+
+    50%{                                   /* when reaching 50% of the animation, do this*/
+        transform: rotate(-180deg);
+    }
+
+    100% {
+        transform: rotate(360deg)
+    }
+}
+
+
+#Photo{
+    grid-area: photo;
+    height: 50px;
+    width: 50px;
+    padding: 20px;
+    margin: 20px;
+    background-color:transparent;
+    border: 2px solid transparent;
+    animation-name: RotatingProfilePhoto;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+}
+#Education{
+    grid-area: education;
+    height:100px;
+    width: 600px;
+    padding: 20px;
+    margin: 20px;
+    background-color: white;
+}
+#Skills{
+    grid-area: skills;
+    height:100px;
+    width: 600px;
+    padding: 20px;
+    margin: 20px;
+    background-color: white;
+}
+
+div{
+    border: 2px solid black;
+}
+
+
+
+div div{ /*a combination selector, that selects the divs that are the childs of a div*/
+    height: 100px;
+    width: 200px;
+    padding: 20px;
+    margin: 20px;
+    background-color: white;
+}
+
+@media only screen and (max-width: 1000px) {
+    body{
+        background-color: turquoise;
+    }
+}
+

@@ -1,0 +1,24 @@
+*{
+    background-color: coral;
+    text-align: center;
+}
+
+h1,h2{
+    color: black;
+}
+
+p{
+    color: darkred;
+}
+
+li{
+    color: darkred;
+}
+
+a{
+    color: darkblue;
+}
+
+*{
+    font-family: Dubai;
+}
