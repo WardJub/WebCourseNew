@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/static/css/assignment8.css">
+    <title>Assignment 9</title>
+</head>
+<body>
+    {% set page_name='Assignment 9' %}
+    {%include ('menu.html') %}
+
+
+<!--    Creating a GET method form for searching the users: -->
+    <h3> Search for a user:</h3>
+    <form action="/assignment9">
+        <input type="text" name="name" placeholder="Name">
+        <input type="submit" name="submit" value="search">
+    </form>
+
+<!--Printing the list/the user we found (if we searched)-->
+    {% if session['name'] %}
+        <ul>
+            {% for user in users %}
+                {% if users[user].name == session['name'] %}
+                    <li> Name: {{ users[user].name }}, Email: {{ users[user].email }}</li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    {% else %}
+        <ul>
+            {% for user in users %}
+                <li> Name: {{ users[user].name }}, Email: {{ users[user].email }} </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+<!--Creating a Registration form-->
+    {% if session.username %}         <!--if we have the parameters, then show the following, else show the login form-->
+        <h2> Welcome Back, {{session.username}}!</h2>
+        <br>
+        <a href="/logout"><button type="button">Logout</button></a>
+
+    {% else %}
+        <h2>Login From:</h2>
+        <form method="POST" action ="/assignment9">
+        Nickname: <input name="nickname" type="text" required> <br><br>
+        Password: <input type="password" name="password" required> <br> <br>
+        <input type="submit">
+    </form>
+    {% endif %}
+
+
+
+</body>
+</html>
