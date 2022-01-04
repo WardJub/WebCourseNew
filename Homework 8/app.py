@@ -1,7 +1,8 @@
-from flask import Flask, redirect, url_for, render_template, request, session
+from flask import Flask, redirect, url_for, render_template, request, session, Blueprint
 
 app = Flask(__name__)
 app.secret_key = '123'
+app.config.from_pyfile('settings.py')
 
 # Creating the default route "/" and connecting it to the CV HTML page that i created in previous homeworks: (added
 # it to templates)
@@ -84,29 +85,17 @@ def logout_func():
     return redirect(url_for('assignment9_func'))
 
 
+# ********************************************* Assignment 10 ****************************************************
+# Creating a blueprint for assignment 10:
+# Added pages + assignment 10 directories, added settings.py and used it above
+
+from pages.assignment10.assignment10 import assignment10
+app.register_blueprint(assignment10)
 
 
 
 
 
-
-
-# @app.route("/assignment9", methods=['GET', 'POST'])
-# def assignment9_func():
-#     if request.method == 'GET':
-#         if 'name' in request.args:  # if the user entered a name when submitting
-#             session['name'] = 'name'
-#         return render_template('assignment9.html', users=users)
-#     return render_template('assignment9.html')
-
-    #         userdict = users
-    #         for key, value in userdict:
-    #             if value.name == 'name':
-    #                 name = value.name
-    #                 email = value.email
-    #         return render_template('assignment9.html', name=name, email=email)
-    #     return render_template('assignment9.html', users=users)
-    # return render_template('assignment9.html')
 
 
 if __name__ == '__main__':
