@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/static/css/assignment8.css">
+    <style>
+        *{ background-color: darksalmon}
+    </style>
+    <title>Assignment 11</title>
+</head>
+<body>
+        {% set page_name='Assignment 11' %}
+        {%include ('menu.html') %}
+
+        <!--  Creating the frontend form: -->
+<!--        <form>-->
+            <h3> Front End Search - Enter The User ID: </h3>
+            <input type="number" name="userid" id="userid">
+            <button onclick="findUser()"> Search FrontEnd </button>
+
+<!--        </form>-->
+        <main id="userdata">
+            <!-- Here we will display the output:-->
+        </main>
+
+
+
+        <!--  Creating The Second Form - Backend:-->
+        <form>
+            <h3> Back End Search - Enter The User ID: </h3>
+            <input type="number" name="number" id="number" required>
+            <input type="submit" value="Search BackEnd">
+        </form>
+
+<!--        if we got a backend request then show the user: -->
+        {% if userfound %}
+<!--        {{userfound.data.id}}-->
+        <img src="{{userfound.data.avatar}}" alt="profile Picture"/>
+        <div>
+            <span>{{userfound.data.first_name}} {{userfound.data.last_name}}</span>
+            <br>
+            <a href="malito:{{userfound.data.email}}">Send Email</a>
+        </div>
+        {%endif%}
+
+
+
+
+
+        <!-- script that contains function for the frontend users fetch:-->
+        <script>
+        function findUser() {
+            console.log('clicked');
+            let userid = document.getElementById('userid').value;
+            userid= userid.toString();
+            fetch('https://reqres.in/api/users/'+userid).then(
+            response => response.json() //the input is response and the output is the same in json format, because it might not be 100% pure json in the beginning
+            ).then(
+            response_obj => {put_users_inside_html(response_obj.data);} //after 'then', the first variable gets the value of the output of the previous function.
+            ).catch(
+            error=> console.log(error)
+            )
+        }
+        function put_users_inside_html(response_obj){
+            const curr_main = document.querySelector("main"); //this is where we want to put the data in the html page (in the <menu> tag)
+            const section = document.createElement('section');
+            clearBox('userdata') //delete the previous user data that was displayed
+            section.innerHTML = `
+            <img src="${response_obj.avatar}" alt="profile Picture"/>
+            <div>
+                <span>${response_obj.first_name} ${response_obj.last_name}</span>
+                <br>
+                <a href="malito:${response_obj.email}">Send Email</a>
+            </div>
+            `;
+            curr_main.appendChild(section);
+        }
+        function clearBox(elementID) //this function will help me clear the previous user data that was displayed
+        {
+            document.getElementById(elementID).innerHTML = "";
+        }
+        </script>
+</body>
+</html>

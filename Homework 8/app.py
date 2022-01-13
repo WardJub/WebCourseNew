@@ -1,8 +1,11 @@
-from flask import Flask, redirect, url_for, render_template, request, session, Blueprint
+from flask import Flask, redirect, url_for, render_template, request, session, Blueprint, jsonify, request
+from interact_with_database import interact_db
+import requests
 
 app = Flask(__name__)
 app.secret_key = '123'
 app.config.from_pyfile('settings.py')
+
 
 # Creating the default route "/" and connecting it to the CV HTML page that i created in previous homeworks: (added
 # it to templates)
@@ -47,11 +50,11 @@ def assignment8_func():
 # Creating Assignment 9 route:
 @app.route('/assignment9', methods=['GET', 'POST'])
 def assignment9_func():
-    if request.method == 'GET':           # if we enter with get method
+    if request.method == 'GET':  # if we enter with get method
         if 'name' in request.args:
-            name = request.args['name']   # get the name from the form input
+            name = request.args['name']  # get the name from the form input
             session['name'] = name
-            if name == '':                # if the user did an empty search
+            if name == '':  # if the user did an empty search
                 return render_template('assignment9.html',
                                        users={'user1': {'name': 'ward', 'email': 'ward@post.com'},
                                               'user2': {'name': 'alex', 'email': 'Alex@gmail.com'},
@@ -59,7 +62,7 @@ def assignment9_func():
                                               'user4': {'name': 'jimmy', 'email': 'JimJim@jimmy.com'},
                                               'user5': {'name': 'moshe', 'email': 'moshimosh@moshi.co.il'}})
 
-            else:      # if the user searched for a certain name
+            else:  # if the user searched for a certain name
                 return render_template('assignment9.html', name=name,
                                        users={'user1': {'name': 'ward', 'email': 'ward@post.com'},
                                               'user2': {'name': 'alex', 'email': 'Alex@gmail.com'},
@@ -67,10 +70,10 @@ def assignment9_func():
                                               'user4': {'name': 'jimmy', 'email': 'JimJim@jimmy.com'},
                                               'user5': {'name': 'moshe', 'email': 'moshimosh@moshi.co.il'}})
 
-        else:         # if the user didn't do anything (just entered the page):
+        else:  # if the user didn't do anything (just entered the page):
             return render_template('assignment9.html')
 
-    if request.method == 'POST':        # if the user used the Post form (registration)
+    if request.method == 'POST':  # if the user used the Post form (registration)
         name = request.form['nickname']  ##form is for form post parameters, args is for GET method parameters
         password = request.form['password']
         # TODO DB CHECK IF USER INFO EXISTS
@@ -90,9 +93,51 @@ def logout_func():
 # Added pages + assignment 10 directories, added settings.py and used it above
 
 from pages.assignment10.assignment10 import assignment10
+
 app.register_blueprint(assignment10)
 
 
+# ********************************************* Assignment 11 ****************************************************
+@app.route('/assignment11/users')
+def assignment11_users_func():
+    query = "select * from users"
+    query_result = interact_db(query=query, query_type='fetch')
+    return jsonify(query_result)  # returns all users with all fields as json
+                                  # Ordered in the proper way.
+
+
+@app.route('/assignment11/outer_source')
+def assignment11_outer_source_func():
+    # return render_template('assignment11.html')
+    if "number" in request.args:
+        usertosearch = int(request.args['number'])
+        userfound = get_user(usertosearch)
+        return render_template('assignment11.html', userfound=userfound)
+    return render_template('assignment11.html')
+
+
+def get_user(num):
+    # usertoshow = []
+    num = str(num)
+    res = requests.get(url=f'https://reqres.in/api/users/{num}')
+    res = res.json()
+    # usertoshow.append(res)
+    return res
+
+
+# ********************************************* Assignment 12 ****************************************************
+
+
+@app.route('/assignment12/restapi_users', defaults={'user_id': 1})  # setting a default user in case no id is provided
+@app.route('/assignment12/restapi_users/<int:user_id>', methods=['GET', 'POST'])
+def get_user_json(user_id):
+    query = "select * from users where id=%s" % user_id
+    query_result = interact_db(query=query,query_type='fetch')
+    if len(query_result) == 0:
+        return_dict = {'status': 'failed', 'message': 'user not found'}  # show error message if user is not found
+    else:                                                                # if user is found, return it in json format:
+        return_dict = {'status': 'success', 'name': query_result[0].name, 'email': query_result[0].email}
+    return jsonify(return_dict)
 
 
 
